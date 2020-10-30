@@ -11,3 +11,10 @@ date()
 ```
 The text continues here.
 
+[Link to my Github repo](https://github.com/LeonMercier/IODS-project)
+
+It will be interesting to see where this course goes. I've been learning R on at my own pace for some time now, working on my own data and learning in a very unstructured way. I've learnt a lot but it has taken me a long time to do simple analyses. But that is learning I guess. 
+
+When it comes to statistics, I'm quite bad and I hope really that I can keep up with the exercises. 
+
+I hope the skills learned on this course will help me work more efficiently but also to improve the **reproducibility** of my work. It seems to me that the more I learn about reproducibility, the worse the current situation in published science looks like. Data related methods are often shared in a very superficial way and the data itself is still only rarely made public. 
