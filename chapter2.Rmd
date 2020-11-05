@@ -87,39 +87,54 @@ predict(existing_model, newdata = df)
 
 ## And here goes the analysis part of the 2nd week assignement
 
+First we load the required libraries that we use in addition to the built-in R functions
 ```{r}
-# load libraries
 library(GGally)
 library(ggplot2)
-
-# reading data from disk
+```
+Then we read the already wrangled data from a file
+```{r}
 students2014 <- read.csv("data/learning2014.csv")
+```
 
-#the data has observations about 166 students and 7 variables 
+The data has 166 rows and 7 column, which correspond to 166 students surveyed and 7 variables measured for each. 
+```{r}
 dim(students2014)
+```
 
-#the Attitude, deep, stra and surf variables range from 1 to 5
-# they were created by taking the means of several answers to a questionnaire
+The Attitude, deep, stra and surf variables range from 1 to 5, they were created by taking the means of several answers to a questionnaire. 
+```{r}
 str(students2014)
+```
 
-# then we draw exploratory plots
-# color the plot by gender
-# set transparency
-# wrap() is used to set the function and parameter used by ggpairs to draw the plots
-#p <- ggpairs(students2014, mapping = aes(col = gender, alpha = 0.4), lower = list(combo = wrap("facethist", bins = 20)))
-
+We can better understand the data by drawing some exploratory plots. The aesthetic aes() is used to color the plots according to gender (col) and set a transparency (alpha). The wrap() function is used to set the function and parameter used by ggpairs to draw the plots. 
+```{r}
+p <- ggpairs(students2014, mapping = aes(col = gender, alpha = 0.4), lower = list(combo = wrap("facethist", bins = 20)))
 # draw the plot
-#p
+p
+```
 
-
-# regressions
+Then comes the actual regression modeling. Attitude, stra and surf were chosen as the explanatory variables as they showed the highest correlations to Points in the exploratory plots above. 
+```{r}
 lm <- lm(Points ~ attitude + stra + surf, data = students2014)
+```
+
+Then we examine the model we made: 
+```{r}
 summary(lm)
-# we see that the coefficients for stra and surf have high p-values, so lets remove them (most parsimonious)
+```
+We see that the coefficients for stra and surf have high p-values, in other words not statistically significant, so lets remove them (this should give the most parsimonious model)
+```{r}
 lm <- lm(Points ~ attitude, data = students2014)
 summary(lm)
-par(mfrow = c(2,2))
-#this will call plot.lm -> we can use the which option to select plot types
-plot(lm)
 ```
+
+Then we generate some diagnostic plots to check if the model assumptions are correct. Calling plot() on a lm-object will call lm.plot(), meaning we can use the which option to select plot types. The par() function puts the plots in a nice grid. 
+```{r}
+par(mfrow = c(2,2))
+plot(lm, which = c(1,2,5))
+```
+
+
+
 
