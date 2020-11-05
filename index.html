@@ -400,7 +400,11 @@ summary {
 <ul>
 <li><a href="#introduction-to-open-data-science---course-project">Introduction to Open Data Science - Course Project</a></li>
 <li><a href="#about-the-project">About the project</a></li>
-<li><a href="#insert-chapter-2-title-here">Insert chapter 2 title here</a></li>
+<li><a href="#insert-chapter-2-title-here">Insert chapter 2 title here</a>
+<ul>
+<li><a href="#from-mabs4iods">From MABS4IODS</a></li>
+<li><a href="#datacamp-exercises">Datacamp exercises</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -414,7 +418,7 @@ summary {
 <pre class="r"><code># This is a so-called &quot;R chunk&quot; where you can write R code.
 
 date()</code></pre>
-<pre><code>## [1] &quot;Fri Oct 30 17:50:32 2020&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Nov  5 11:08:26 2020&quot;</code></pre>
 <p>The text continues here.</p>
 <p><a href="https://github.com/LeonMercier/IODS-project">Link to my Github repo</a></p>
 <p>It will be interesting to see where this course goes. I’ve been learning R on at my own pace for some time now, working on my own data and learning in a very unstructured way. I’ve learnt a lot but it has taken me a long time to do simple analyses. But that is learning I guess.</p>
@@ -431,10 +435,56 @@ date()</code></pre>
 <li>Assume the reader has no previous knowledge of your data or the more advanced methods you are using.</li>
 </ul>
 <pre class="r"><code>date()</code></pre>
-<pre><code>## [1] &quot;Fri Oct 30 17:50:32 2020&quot;</code></pre>
+<pre><code>## [1] &quot;Thu Nov  5 11:08:26 2020&quot;</code></pre>
 <p>Here we go again…</p>
+<pre class="r"><code>#we can use a character vector to hold variable names
+#vars &lt;- c(&quot;var1&quot;, &quot;var2&quot;, &quot;var3&quot;)
+#but then we need to use all_of() inside of select()
+#analysis &lt;- select(df, all_of(vars))
+
+#rename variables
+#rename(learning2014, dEEp = deep)
+#the syntax is rename(df, newName = oldName) no quotes</code></pre>
+<pre class="r"><code>#2020-11-04
+#</code></pre>
+<p>2020-11-04 filter() is like subset() geom_smooth() to add regression lines</p>
+<p>pairs() a quick graphical comparison of all possible variable pairs in a data frame ggpairs() is same as pairs() but more advanced with the ‘upper’ and ‘lower’ parameters it can be useful to use wrap()</p>
+<div id="from-mabs4iods" class="section level2">
+<h2>From MABS4IODS</h2>
+<div id="chapter-1" class="section level3">
+<h3>Chapter 1</h3>
+<p>on interpreting the p-value: “The probability of obtaining the observed data (or data that represent a more extreme departure from the null hypothesis) if the null hypothesis is true.” and &quot; p-values should not be taken too seriously; confidence intervals are often more informative&quot;</p>
+</div>
+<div id="chapter-2-looking-at-data" class="section level3">
+<h3>Chapter 2: Looking at Data</h3>
+</div>
+<div id="chapter-3-simple-linear-and-locally-weighted-regression" class="section level3">
+<h3>CHapter 3: Simple Linear and Locally Weighted Regression</h3>
+<p>response variable = intercept + (slope * explanatory var) + error</p>
+</div>
+<div id="chapter-4-multiple-linear-regression" class="section level3">
+<h3>Chapter 4: Multiple Linear Regression</h3>
+</div>
+</div>
+<div id="datacamp-exercises" class="section level2">
+<h2>Datacamp exercises</h2>
+<div id="video-linear-regression" class="section level3">
+<h3>Video: Linear regression</h3>
+<p>residual: the difference between values predicted by the model and the actual values of <em>y</em> the model is found by minimizing the sum of the squared residuals (distances of the data points from the regression line)</p>
+<p>output of summary() coefficients: estimates of the model parameters<br />
+intercept estimate: alpha of model variable estimate: beta or slope of model t-value and p-value testing the null hypothesis that the slope is 0 (no relationship between variables) low p-value: we can conclude that there <em>IS</em> a relationship between the variables</p>
+<p>lm(y ~ x1 + x2 + x3 …, data = df)</p>
+<p>diagnostic plots for regression models plot(lm_object)</p>
+<p>Video: Model validation exploring the assumptions residuals: errors normally distributed errors not correlated errors have constant variance error size does not depend on explanatory variable</p>
+<p>QQ-plot -&gt; normality of residuals residuals are normally distributed if they fall on the line of the plot</p>
+<p>constant variance of errors = error size does not depend on explanatory variable -&gt; plot residuals vs model predictions/fitted values -&gt; there should not be any kind of pattern</p>
+<p>Leverage = how much impact a single vobservation has on the model -&gt; plot residuals vs leverage -&gt; which observations have an unusually high impact</p>
+<p>back to datacamp</p>
+<p>predict(existing_model, newdata = df) using and existing model and new values for the explanatory variable, we can predict the dependent variable</p>
 <hr />
 <p>(more chapters to be added similarly as we proceed with the course!)</p>
+</div>
+</div>
 </div>
 
 

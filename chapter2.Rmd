@@ -11,3 +11,85 @@ date()
 ```
 
 Here we go again...
+
+```{r}
+#we can use a character vector to hold variable names
+#vars <- c("var1", "var2", "var3")
+#but then we need to use all_of() inside of select()
+#analysis <- select(df, all_of(vars))
+
+#rename variables
+#rename(learning2014, dEEp = deep)
+#the syntax is rename(df, newName = oldName) no quotes
+```
+
+```{r}
+#2020-11-04
+#
+```
+2020-11-04
+filter() is like subset()
+geom_smooth() to add regression lines
+
+pairs() a quick graphical comparison of all possible variable pairs in a data frame
+ggpairs() is same as pairs() but more advanced
+  with the 'upper' and 'lower' parameters it can be useful to use wrap()
+
+## From MABS4IODS
+### Chapter 1
+on interpreting the p-value: "The probability of obtaining the observed data (or data that represent a more extreme departure from the null hypothesis) if the null hypothesis is true."
+and
+" p-values should not be taken too seriously; confidence intervals are often more informative"
+
+### Chapter 2: Looking at Data
+
+### CHapter 3: Simple Linear and Locally Weighted Regression
+
+response variable = intercept + (slope * explanatory var) + error
+
+### Chapter 4: Multiple Linear Regression
+
+## Datacamp exercises
+### Video: Linear regression
+
+residual: the difference between values predicted by the model and the actual values of _y_
+the model is found by minimizing the sum of the squared residuals (distances of the data points from the regression line)
+
+output of summary() 
+  coefficients: estimates of the model parameters  
+  intercept estimate: alpha of model
+  variable estimate: beta or slope of model
+  t-value and p-value testing the null hypothesis that the slope is 0 (no relationship between variables)
+  low p-value: we can conclude that there *IS* a relationship between the variables
+  
+lm(y ~ x1 + x2 + x3 ..., data = df)
+
+diagnostic plots for regression models
+  plot(lm_object)
+  
+Video: Model validation
+exploring the assumptions
+residuals: 
+  errors normally distributed
+  errors not correlated
+  errors have constant variance
+  error size does not depend on explanatory variable
+  
+QQ-plot -> normality of residuals
+  residuals are normally distributed if they fall on the line of the plot
+  
+constant variance of errors = error size does not depend on explanatory variable
+-> plot residuals vs model predictions/fitted values
+-> there should not be any kind of pattern
+
+Leverage = how much impact a single vobservation has on the model
+-> plot residuals vs leverage -> which observations have an unusually high impact
+
+back to datacamp
+
+predict(existing_model, newdata = df)
+using and existing model and new values for the explanatory variable, we can predict the dependent variable
+
+
+
+
