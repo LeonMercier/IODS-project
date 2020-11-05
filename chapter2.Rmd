@@ -1,4 +1,4 @@
-# Insert chapter 2 title here
+# Chapter 2: regression and model validation
 
 *Describe the work you have done this week and summarize your learning.*
 
@@ -10,86 +10,116 @@
 date()
 ```
 
-Here we go again...
+## First some notes from the DataCamp exercises 
+the actual analysis exercise is further down
 
-```{r}
-#we can use a character vector to hold variable names
-#vars <- c("var1", "var2", "var3")
-#but then we need to use all_of() inside of select()
-#analysis <- select(df, all_of(vars))
-
-#rename variables
-#rename(learning2014, dEEp = deep)
-#the syntax is rename(df, newName = oldName) no quotes
+We can use a character vector to hold variable names, but then we need to use all_of() inside of select()
+```{r, eval = FALSE}
+vars <- c("var1", "var2", "var3")
+analysis <- select(df, all_of(vars))
 ```
 
-```{r}
-#2020-11-04
-#
+The syntax for renaming variables is rename(df, newName = oldName) no quotes
+```{r, eval = FALSE}
+rename(learning2014, dEEp = deep)
 ```
-2020-11-04
-filter() is like subset()
-geom_smooth() to add regression lines
 
-pairs() a quick graphical comparison of all possible variable pairs in a data frame
-ggpairs() is same as pairs() but more advanced
-  with the 'upper' and 'lower' parameters it can be useful to use wrap()
+* filter() is like subset()
+* geom_smooth() is used to add regression lines to plots
+* pairs() a quick graphical comparison of all possible variable pairs in a data frame
+* ggpairs() is same as pairs() but more advanced
+  * with the 'upper' and 'lower' parameters it can be useful to use wrap()
 
-## From MABS4IODS
-### Chapter 1
-on interpreting the p-value: "The probability of obtaining the observed data (or data that represent a more extreme departure from the null hypothesis) if the null hypothesis is true."
-and
-" p-values should not be taken too seriously; confidence intervals are often more informative"
+## A couple of notes from the MABS4IODS book
 
-### Chapter 2: Looking at Data
+On interpreting the p-value: 
 
-### CHapter 3: Simple Linear and Locally Weighted Regression
+> The probability of obtaining the observed data (or data that represent a more extreme departure from the null hypothesis) if the null hypothesis is true.
+
+and 
+
+> p-values should not be taken too seriously; confidence intervals are often more informative
+
+Terminology: 
 
 response variable = intercept + (slope * explanatory var) + error
 
-### Chapter 4: Multiple Linear Regression
+## More notes from the DataCamp exercises
 
-## Datacamp exercises
 ### Video: Linear regression
 
-residual: the difference between values predicted by the model and the actual values of _y_
-the model is found by minimizing the sum of the squared residuals (distances of the data points from the regression line)
+Residuals: the difference between values predicted by the model and the actual values of the response variable _y_. The model is found by minimizing the sum of the squared residuals (distances of the data points from the regression line)
 
-output of summary() 
-  coefficients: estimates of the model parameters  
-  intercept estimate: alpha of model
-  variable estimate: beta or slope of model
-  t-value and p-value testing the null hypothesis that the slope is 0 (no relationship between variables)
-  low p-value: we can conclude that there *IS* a relationship between the variables
+Meaning of the output of summary() 
+* coefficients: estimates of the model parameters  
+* intercept estimate: alpha of model
+* variable estimate: beta or slope of model
+* t-value and p-value testing the null hypothesis that the slope is 0 (no relationship between variables)
+* low p-value: we can conclude that there *IS* a relationship between the variables
   
-lm(y ~ x1 + x2 + x3 ..., data = df)
-
-diagnostic plots for regression models
-  plot(lm_object)
+Regression model object is created with lm() and it can also be multivariable (x1, x2, x3 ...)  
+Conveniently passing the object to plot() gives diagnostic plots
+```{r, eval = FALSE}
+my_lm <- lm(y ~ x1 + x2 + x3 ..., data = df)
+plot(my_lm)
+```
   
-Video: Model validation
-exploring the assumptions
-residuals: 
-  errors normally distributed
-  errors not correlated
-  errors have constant variance
-  error size does not depend on explanatory variable
-  
-QQ-plot -> normality of residuals
-  residuals are normally distributed if they fall on the line of the plot
-  
-constant variance of errors = error size does not depend on explanatory variable
--> plot residuals vs model predictions/fitted values
--> there should not be any kind of pattern
+### Video: Model validation
+The assumption of the model must be confirmed to be true before it should be trusted. Considering the residuals / errors, this means that (number 3 and 4 are essentially the same thing?):
+1) errors are normally distributed
+2) errors are not correlated
+3) errors have constant variance
+4) error size does not depend on explanatory variable
 
-Leverage = how much impact a single vobservation has on the model
--> plot residuals vs leverage -> which observations have an unusually high impact
+So how to examine this?  
+* Normal distribution of residuals: the QQ-plot
+  * Residuals are normally distributed if they fall on the line of the plot
+* Constant variance of errors = error size does not depend on explanatory variable
+  * Plot residuals vs model predictions/fitted values
+  * There should not be any kind of pattern
+* Leverage means how much impact a single observation has on the model
+  * Plot residuals vs leverage and you will see which observations have an unusually high impact
 
-back to datacamp
-
+The lm-object we created can be used to predict using and existing model: giving new values for the explanatory variable, we can predict the dependent variable
+```{r, eval = FALSE}
 predict(existing_model, newdata = df)
-using and existing model and new values for the explanatory variable, we can predict the dependent variable
+```
+
+## And here goes the analysis part of the 2nd week assignement
+
+```{r}
+# load libraries
+library(GGally)
+library(ggplot2)
+
+# reading data from disk
+students2014 <- read.csv("data/learning2014.csv")
+
+#the data has observations about 166 students and 7 variables 
+dim(students2014)
+
+#the Attitude, deep, stra and surf variables range from 1 to 5
+# they were created by taking the means of several answers to a questionnaire
+str(students2014)
+
+# then we draw exploratory plots
+# color the plot by gender
+# set transparency
+# wrap() is used to set the function and parameter used by ggpairs to draw the plots
+#p <- ggpairs(students2014, mapping = aes(col = gender, alpha = 0.4), lower = list(combo = wrap("facethist", bins = 20)))
+
+# draw the plot
+#p
 
 
-
+# regressions
+lm <- lm(Points ~ attitude + stra + surf, data = students2014)
+summary(lm)
+# we see that the coefficients for stra and surf have high p-values, so lets remove them (most parsimonious)
+lm <- lm(Points ~ attitude, data = students2014)
+summary(lm)
+par(mfrow = c(2,2))
+#this will call plot.lm -> we can use the which option to select plot types
+plot(lm)
+```
 
