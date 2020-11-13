@@ -1,3 +1,40 @@
 # Week 3
 ## Lesson monday 2020-11-09
 generalized linear models: works also for example for binary response variables
+
+```{r}
+alc <- read_csv("data/alc.csv")
+colnames(alc)
+```
+
+Quick way to plot counts of a lot of variables
+```{r}
+gather(alc) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar()
+```
+
+## Datacamp video; logistic regression
+## Datacamp video; odds ratio
+odds ratio = odds of Y=1 when has property X / odds of Y=1 when has NO X
+
+# "study the relationships between high/low alcohol consumption and some of the other variables in the data. To do this, choose 4 interesting variables in the data and for each of them, present your personal hypothesis about their relationships with alcohol consumption. "
+1) freetime: more free time leads to higher alcohol use
+2) goout: going out leads to higher alcohol use
+3) address: students with rural home environments drink less
+4) Medu: students with highly educated mothers drink less
+
+```{r}
+g1 <- ggplot(alc, aes(x = high_use, y = freetime)) 
+g1 + geom_boxplot()
+g2 <- ggplot(alc, aes(x = high_use, y = goout)) 
+g2 + geom_boxplot()
+g4 <- ggplot(alc, aes(x = high_use, y = Medu)) 
+g4 + geom_boxplot()
+
+with(alc, table(high_use, address))
+```
+
+## the model:
+```{r}
+
+```
+
