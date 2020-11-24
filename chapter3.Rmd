@@ -35,6 +35,16 @@ with(alc, table(high_use, address))
 
 ## the model:
 ```{r}
+m <- glm(high_use ~ freetime + goout + Medu + address, data = alc, family = "binomial")
+# compute odds ratios (OR)
+OR <- coef(m) %>% exp
 
+# compute confidence intervals (CI)
+CI <- confint(m) %>% exp
+
+# print out the odds ratios with their confidence intervals
+cbind(OR, CI)
 ```
+
+
 
