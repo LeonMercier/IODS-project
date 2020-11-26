@@ -1,3 +1,5 @@
+## Notes from DataCamp exercises
+
 complete.cases() returns true if case has no NAs
 
 correlation matrix cor()
@@ -25,47 +27,28 @@ arrows represet the original features
   
 Multiple correspondence analysis (MCA): like PCA but for categorical variables
 
-```{r}
-library(FactoMineR)
-data(tea)
-# column names to keep in the dataset
-keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
 
-# select the 'keep_columns' to create a new dataset
-tea_time <- select(tea, one_of(keep_columns))
+## Then onto the actual course exercise
 
-# multiple correspondence analysis
-mca <- MCA(tea_time, graph = FALSE)
-
-# summary of the model
-summary(mca)
-
-# visualize MCA
-plot(mca, invisible=c("ind"), habillage = "quali")
-```
-
-Then onto the actual course exercise
-
+First we load the required packages. Tidyverse includes dplyr and others.
 ```{r echo = TRUE, message = FALSE }
 library(tidyverse)
 library(GGally)
+```
+Then we read the data from a file, make a visualisation and a summary of the variables. 
+```{r}
 human <- read_csv("data/human.csv")
 ggpairs(human)
-```
-
-```{r}
 summary(human)
 ```
 
+We use prcomp() to make the principal component analysis and biplot() to visualise the result. Then we show the amount of variability captured by each principal component, converted into percentage display. 
 ```{r}
 pca <- prcomp(human)
-biplot(pca)
-
-#here we see that the first principal component captures nearly all of the variability of the data. THis is due to the data not being standardizet properly i.e. the variances of the variables being of different sizes. 
 round(100 * summary(pca)$importance[2,], digits = 2)
+biplot(pca)
 ```
-
-Now with scaled (standardized data)
+And we do the same as above but with properly scaled (standardized data). 
 ```{r}
 humanStd <- scale(human)
 pca <- prcomp(humanStd)
@@ -73,12 +56,19 @@ biplot(pca)
 
 round(100 * summary(pca)$importance[2,], digits = 2)
 ```
+Here we see that with the non-standardized data the first principal component captures nearly all of the variability of the data. THis is due to the variances of the variables being of different sizes. 
 
+### Multiple correspondence analysis
+We load the FactoMineR library and the 'tea' dataset. Then we explore the structure and dimensions of the dataset. 
 ```{r}
 library(FactoMineR)
 data(tea)
 str(tea)
 dim(tea)
+```
+
+Performing the Multiple correspondence analysis. 
+```{r}
 
 keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
 
