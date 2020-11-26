@@ -1,4 +1,4 @@
-# Chapter 2: regression and model validation
+# Week 2: regression and model validation
 
 *Describe the work you have done this week and summarize your learning.*
 

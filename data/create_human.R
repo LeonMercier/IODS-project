@@ -15,15 +15,12 @@ dim(human)
 str(human)
 summary(human)
 # The columns represent the following measures
-# HDI.Rank: 
 # HDI: The Human Development Index; please see the original data source for more information
 # Life.Exp: average life expencancy at birth in years
 # Edu.Exp: Expected length of schooling in years
-# Edu.Mean
+# Edu.Mean: Mean years of schooling
 # GNI: Gross National Income per capita         
-# GNI.Minus.Rank
-# GII.Rank
-# GII
+# GII: Gender inequality index
 # Mat.Mor: Maternal mortality ratio
 # Ado.Birth: Adolescent birth rate
 # Parli.F: Proportion of Female representatives in parliament as percentage
@@ -63,4 +60,5 @@ human <- human[1:last, ]
 rownames(human) <- human$Country
 human <- dplyr::select(human, !c("Country"))
 
-write_csv(human, "data/human.csv")
+# write the data to a file
+write.csv(human, "data/human.csv")

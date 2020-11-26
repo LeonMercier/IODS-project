@@ -1,3 +1,5 @@
+# Week 5
+
 ## Notes from DataCamp exercises
 
 complete.cases() returns true if case has no NAs
@@ -35,28 +37,33 @@ First we load the required packages. Tidyverse includes dplyr and others.
 library(tidyverse)
 library(GGally)
 ```
-Then we read the data from a file, make a visualisation and a summary of the variables. 
-```{r}
-human <- read_csv("data/human.csv")
+Then we read the data from a file, make a visualisation showing possible correlations of the variables. And finally we show summary of the variables. 
+```{r message = FALSE}
+# row.names = 1 means that the first column is interpreted as rownames
+human <- read.csv("data/human.csv", row.names = 1)
 ggpairs(human)
 summary(human)
 ```
+Looking at the plots, it seems quite clear that several of the variables are correlated. For example Gross National income has a positive correlation to expected length of schooling, life expectancy and ratio of women in higher education. Additionally, it has a negative correlation to maternal mortality and adolescent birth ratio. Most variables seem to have a somewhat normal distribution with some having a long one-sided tail; most countries rank on the low side of the spectrum in GNI, maternal mortality and adolescent births with the distributions having only a few very high values. 
+
 
 We use prcomp() to make the principal component analysis and biplot() to visualise the result. Then we show the amount of variability captured by each principal component, converted into percentage display. 
-```{r}
+```{r message=FALSE, warning = FALSE}
 pca <- prcomp(human)
 round(100 * summary(pca)$importance[2,], digits = 2)
 biplot(pca)
 ```
-And we do the same as above but with properly scaled (standardized data). 
-```{r}
+This plot is a mess. Here we see that with the non-standardized data the first principal component captures nearly all of the variability of the data. This is due to the variances of the variables being of different sizes. 
+
+And we do the same as above but with properly scaled (standardized data). This means that the variables have equal means and standard deviations. This is required because the principal component analysis heavily emphasizes variables with a higher variance. Here in the above example GNI is emphasized because its numeric values are much higher than those of the other variables. 
+```{r message=FALSE, warning = FALSE}
 humanStd <- scale(human)
 pca <- prcomp(humanStd)
-biplot(pca)
-
 round(100 * summary(pca)$importance[2,], digits = 2)
+biplot(pca, col = c("grey80", "black"), expand = 1)
 ```
-Here we see that with the non-standardized data the first principal component captures nearly all of the variability of the data. THis is due to the variances of the variables being of different sizes. 
+Here we see that that the variables Edu.Exp, Edu2.FM, Life.exp, GNI, Mat.Mor and Ado.Birth are along the X-axis representing PC1. Mat.Mor and Ado.Birth are pointing to an opposite direction compared to the rest of the variables indicating an inverse correlation. This makes sense intuitively: countries with high level of wealth, educational expectation and life exectancy have low maternal mortality and adolescent births. 
+The arrows representing Parl.F and Labo.FM are along the Y-axis. They represent PC2, having a very low correlation to the PC1 variables. These variables indicate the level of gender equality in  the labour market and in the parliaments of the countries. So the main result of our analysis is that women's empowerment is not necessarily correlated to more conventional measurements of human progress. There may be countries with a high level of wealth but where women do not have equal standing in society and likewise there may be countries that are more egalitarian, but poor with low level of education and health services. What is odd though is that the variable Edu2.FM seems not to follow this pattern, suggesting women's proportion in secondary education is more related to the wealth of the country than to the level of gender equality in that country. 
 
 ### Multiple correspondence analysis
 We load the FactoMineR library and the 'tea' dataset. Then we explore the structure and dimensions of the dataset. 
@@ -67,14 +74,21 @@ str(tea)
 dim(tea)
 ```
 
-Performing the Multiple correspondence analysis. 
-```{r}
-
+Let's make some kind of visualisation
+```{r warning=FALSE}
+# these are the columns we want
 keep_columns <- c("Tea", "How", "how", "sugar", "where", "lunch")
+# create a new dataFrame with only the desired columns
+tea_time <- select(tea, all_of(keep_columns))
 
-# select the 'keep_columns' to create a new dataset
-tea_time <- select(tea, one_of(keep_columns))
-mca <- MCA(tea_time)
-plot(mca, invisible = c("ind"))
+gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() +theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 ```
 
+
+Performing the Multiple correspondence analysis. 
+```{r}
+#suppress the automatic graphing of mca(); we make a custom plot below
+mca <- MCA(tea_time, graph = FALSE)
+plot(mca, invisible = c("ind"), habillage = "quali")
+```
+It seems that the packaging of tea and the place of purchase are correlated. For example, individuals who buy tea from tea shops also tend to buy unpackaged tea. Fans of green tea also seem to be more likely to be in the teashop/unpackaged group. These are reasonable conclusion if looking at the tea selection in supermarkets; it is mostly black tea packaged in teabags. With the other variables correlations are less clear. 
